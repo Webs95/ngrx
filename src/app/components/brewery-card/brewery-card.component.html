@@ -2,17 +2,17 @@
   <div class="brewery-card__info">
     <label for="name" class="brewery-card__label">
       Name:
-      <span id="name" class="text">text</span>
+      <span id="name" class="text">{{ data()?.name }}</span>
     </label>
 
     <label for="brewery_type" class="brewery-card__label">
       Type:
-      <span id="brewery_type" class="text">text</span>
+      <span id="brewery_type" class="text">{{ data()?.brewery_type }}</span>
     </label>
 
     <label for="address_1" class="brewery-card__label">
       Address:
-      <span id="address_1" class="text">text</span>
+      <span id="address_1" class="text">{{ data()?.address_1 }}</span>
     </label>
   </div>
 </div>

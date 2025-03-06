@@ -1,6 +1,6 @@
 <div class="breweries-list">
   @for (brewery of breweries(); track brewery.id) {
-    <app-brewery-card></app-brewery-card>
+    <app-brewery-card [data]="brewery"></app-brewery-card>
   }
 </div>
 

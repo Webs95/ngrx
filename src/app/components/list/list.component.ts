@@ -1,5 +1,4 @@
 import {Component, inject} from '@angular/core';
-import {BreweryService} from '../../service/brewery.service';
 import {BreweryCardComponent} from '../brewery-card/brewery-card.component';
 import {BreweryStore} from '../../store/brewery.store';
 
@@ -15,8 +14,4 @@ export class ListComponent {
   breweryStore = inject(BreweryStore);
 
   breweries = this.breweryStore.breweries;
-
-  ngOnInit(): void {
-    this.breweryStore.getAll(null);
-  }
 }

@@ -1,10 +1,8 @@
 import {Brewery} from '../interface/brewery.interface';
-import {patchState, signalStore, withComputed, withMethods, withState} from '@ngrx/signals';
+import {patchState, signalStore, withHooks, withMethods, withProps, withState} from '@ngrx/signals';
 import {computed, inject} from '@angular/core';
 import {BreweryService} from '../service/brewery.service';
-import {rxMethod} from '@ngrx/signals/rxjs-interop';
-import {distinctUntilChanged, pipe, switchMap, tap} from 'rxjs';
-import {tapResponse} from '@ngrx/operators';
+import {firstValueFrom} from 'rxjs';
 
 type BreweryState = {
   breweries: Brewery[];
@@ -17,24 +15,27 @@ const initialState: BreweryState = {
 }
 
 export const BreweryStore = signalStore(
-  {providedIn: 'root'},
+  { providedIn: 'root' },
   withState(initialState),
-  withComputed(({ breweries }) => ({
-    breweriesCount: computed(() => breweries.length),
+  withProps(({ breweries }) => ({
+    breweriesCount: computed(() => breweries().length)
   })),
   withMethods((store, breweryService = inject(BreweryService)) => ({
-    getAll: rxMethod(
-      pipe(
-        distinctUntilChanged(),
-        tap(() => patchState(store, {isLoading: true})),
-        switchMap(() => breweryService.getBreweries().pipe(
-          tapResponse({
-            next: (breweries) => patchState(store, { breweries }),
-            error: console.error,
-            finalize: () => patchState(store, {isLoading: false}),
-          })
-        )),
-      )
-    )
-  }))
-)
+    async getAll() {
+      patchState(store, { isLoading: true });
+      try {
+        const breweries = await firstValueFrom(breweryService.getBreweries());
+        patchState(store, { breweries });
+      } catch (error) {
+        console.error(error);
+      } finally {
+        patchState(store, { isLoading: false });
+      }
+    },
+  })),
+  withHooks({
+    onInit(store) {
+      store.getAll();
+    },
+  })
+);
