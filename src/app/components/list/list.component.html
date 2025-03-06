@@ -1,3 +1,5 @@
+<h3>Total count: {{ breweriesCount() }}</h3>
+
 <div class="breweries-list">
   @for (brewery of breweries(); track brewery.id) {
     <app-brewery-card [data]="brewery"></app-brewery-card>

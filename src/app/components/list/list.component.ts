@@ -14,4 +14,5 @@ export class ListComponent {
   breweryStore = inject(BreweryStore);
 
   breweries = this.breweryStore.breweries;
+  breweriesCount = this.breweryStore.breweriesCount;
 }
